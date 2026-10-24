@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	changelogcontroller "github.com/bradmwilliams/changelog-controller/pkg/cmd/changelog-controller"
+	changelogcontroller "github.com/openshift-eng/changelog-controller/pkg/cmd/changelog-controller"
 	"github.com/spf13/cobra"
 	"k8s.io/component-base/cli"
 )

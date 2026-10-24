@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
-	"github.com/bradmwilliams/changelog-controller/pkg/storage/filesystem"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/storage/filesystem"
 )
 
 func TestChangelogCache_Stats(t *testing.T) {

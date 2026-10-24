@@ -9,7 +9,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
 	"github.com/openshift/library-go/pkg/operator/events"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"

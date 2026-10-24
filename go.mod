@@ -1,4 +1,4 @@
-module github.com/bradmwilliams/changelog-controller
+module github.com/openshift-eng/changelog-controller
 
 go 1.26.0
 

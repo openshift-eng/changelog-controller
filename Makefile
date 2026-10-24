@@ -13,7 +13,7 @@ SOURCE_GIT_TAG=v1.0.0+$(shell git rev-parse --short=7 HEAD)
 
 GOLINT=golangci-lint
 
-GO_LD_EXTRAFLAGS=-X github.com/bradmwilliams/changelog-controller/vendor/k8s.io/client-go/pkg/version.gitCommit=$(shell git rev-parse HEAD) -X github.com/bradmwilliams/changelog-controller/vendor/k8s.io/client-go/pkg/version.gitVersion=${SOURCE_GIT_TAG} -X k8s.io/test-infra/prow/version.Name=changelog-controller -X k8s.io/test-infra/prow/version.Version=${version}
+GO_LD_EXTRAFLAGS=-X github.com/openshift-eng/changelog-controller/vendor/k8s.io/client-go/pkg/version.gitCommit=$(shell git rev-parse HEAD) -X github.com/openshift-eng/changelog-controller/vendor/k8s.io/client-go/pkg/version.gitVersion=${SOURCE_GIT_TAG} -X k8s.io/test-infra/prow/version.Name=changelog-controller -X k8s.io/test-infra/prow/version.Version=${version}
 GO_TEST_FLAGS=
 
 sonar-reports:

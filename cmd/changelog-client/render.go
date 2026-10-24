@@ -34,7 +34,7 @@ const htmlPageStart = `<!DOCTYPE html>
 <div class="container">
 `
 
-const htmlPageEnd = `<p class="small">Source code for this page located on <a href="https://github.com/bradmwilliams/changelog-controller">github</a></p>
+const htmlPageEnd = `<p class="small">Source code for this page located on <a href="https://github.com/openshift-eng/changelog-controller">github</a></p>
 <p class="small text-muted">Rendered by changelog-client (changelog-controller client)</p>
 </div>
 </body>

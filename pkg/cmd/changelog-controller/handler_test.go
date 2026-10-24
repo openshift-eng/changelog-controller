@@ -8,9 +8,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/changelog"
-	rc "github.com/bradmwilliams/changelog-controller/pkg/release-controller"
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/changelog"
+	rc "github.com/openshift-eng/changelog-controller/pkg/release-controller"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
 	"github.com/openshift/library-go/pkg/operator/events"
 	"k8s.io/utils/clock"
 )

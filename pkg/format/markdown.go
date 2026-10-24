@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/changelog"
+	"github.com/openshift-eng/changelog-controller/pkg/changelog"
 )
 
 // ChangeLogMarkdown renders a structured ChangeLog as markdown.

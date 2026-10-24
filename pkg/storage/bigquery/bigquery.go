@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"cloud.google.com/go/bigquery"
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
 	"google.golang.org/api/iterator"
 )
 

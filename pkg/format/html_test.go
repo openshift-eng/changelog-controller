@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/changelog"
+	"github.com/openshift-eng/changelog-controller/pkg/changelog"
 )
 
 func TestChangeLogHTML(t *testing.T) {

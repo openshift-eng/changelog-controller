@@ -9,7 +9,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	gcs "cloud.google.com/go/storage"
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"

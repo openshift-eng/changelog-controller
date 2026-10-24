@@ -158,7 +158,7 @@ package postgres
 
 import (
     "context"
-    "github.com/bradmwilliams/changelog-controller/pkg/storage"
+    "github.com/openshift-eng/changelog-controller/pkg/storage"
 )
 
 type PostgresStorage struct {

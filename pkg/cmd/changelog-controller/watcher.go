@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	rc "github.com/bradmwilliams/changelog-controller/pkg/release-controller"
+	rc "github.com/openshift-eng/changelog-controller/pkg/release-controller"
 	"k8s.io/klog/v2"
 )
 

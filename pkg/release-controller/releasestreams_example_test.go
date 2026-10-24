@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	rc "github.com/bradmwilliams/changelog-controller/pkg/release-controller"
+	rc "github.com/openshift-eng/changelog-controller/pkg/release-controller"
 )
 
 // Example_getAllReleaseStreams demonstrates fetching all release streams with their releases

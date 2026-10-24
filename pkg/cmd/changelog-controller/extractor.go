@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
 	"k8s.io/klog/v2"
 )
 

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/storage"
+	"github.com/openshift-eng/changelog-controller/pkg/storage"
 )
 
 func TestSnapshotStorage_GetSet(t *testing.T) {

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bradmwilliams/changelog-controller/pkg/changelog"
+	"github.com/openshift-eng/changelog-controller/pkg/changelog"
 )
 
 const (
