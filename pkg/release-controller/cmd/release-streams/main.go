@@ -96,7 +96,7 @@ func querySingleEndpoint(ctx context.Context, arch rc.Architecture, product rc.P
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	endpoint := client.GetEndpoint()
 	if verbose {
@@ -192,7 +192,7 @@ func queryAllEndpoints(ctx context.Context, verbose bool, streamFilter string, s
 	if err != nil {
 		log.Fatalf("Failed to create multi-client: %v", err)
 	}
-	defer mc.Close()
+	defer func() { _ = mc.Close() }()
 
 	allClients := mc.GetAllClients()
 	fmt.Printf("Querying %d endpoints...\n\n", len(allClients))
@@ -265,7 +265,7 @@ func findReleaseInEndpoint(ctx context.Context, arch rc.Architecture, product rc
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	fmt.Printf("Searching for release '%s' in %s/%s...\n\n", releaseName, product, arch)
 
@@ -291,7 +291,7 @@ func findReleaseAcrossAll(ctx context.Context, releaseName string) {
 	if err != nil {
 		log.Fatalf("Failed to create multi-client: %v", err)
 	}
-	defer mc.Close()
+	defer func() { _ = mc.Close() }()
 
 	fmt.Printf("Searching for release '%s' across all endpoints...\n\n", releaseName)
 
@@ -369,7 +369,7 @@ func getReleaseInfo(ctx context.Context, arch, product, streamName, releaseName 
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	fmt.Printf("Fetching release info for '%s' in stream '%s' from %s/%s...\n\n", releaseName, streamName, prod, architecture)
 
@@ -518,7 +518,7 @@ func getPullSpec(ctx context.Context, arch, product, releaseName string) {
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	fmt.Printf("Searching for release '%s' in %s/%s...\n\n", releaseName, prod, architecture)
 
@@ -536,7 +536,7 @@ func getPullSpecAcrossAll(ctx context.Context, releaseName string) {
 	if err != nil {
 		log.Fatalf("Failed to create multi-client: %v", err)
 	}
-	defer mc.Close()
+	defer func() { _ = mc.Close() }()
 
 	fmt.Printf("Searching for release '%s' across all endpoints...\n\n", releaseName)
 

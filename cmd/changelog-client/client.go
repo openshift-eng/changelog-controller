@@ -63,7 +63,7 @@ func (c *Client) getJSON(rawURL string, target any) error {
 	if err != nil {
 		return err
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode == http.StatusAccepted {
 		return ErrChangelogPending

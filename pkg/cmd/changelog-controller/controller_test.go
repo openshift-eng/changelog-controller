@@ -14,7 +14,7 @@ import (
 func TestChangelogCache_Stats(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-cache-stats")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	// Create filesystem storage backend
 	fsStorage, err := filesystem.NewFilesystemStorage(ctx, filesystem.Config{
@@ -23,7 +23,7 @@ func TestChangelogCache_Stats(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer fsStorage.Close()
+	defer func() { _ = fsStorage.Close() }()
 
 	// Create cache with storage backend
 	cache := NewChangelogCache(fsStorage)
@@ -130,7 +130,7 @@ func TestChangelogCache_HitRateCalculation(t *testing.T) {
 func TestChangelogCache_StorageFallback(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-cache-fallback")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	fsStorage, err := filesystem.NewFilesystemStorage(ctx, filesystem.Config{
 		BaseDir: tempDir,
@@ -138,7 +138,7 @@ func TestChangelogCache_StorageFallback(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer fsStorage.Close()
+	defer func() { _ = fsStorage.Close() }()
 
 	// Write directly to storage backend, bypassing in-memory cache
 	if err := fsStorage.Set(ctx, "from-spec", "to-spec", "changelog from storage"); err != nil {
@@ -179,7 +179,7 @@ func TestChangelogCache_StorageFallback(t *testing.T) {
 func TestChangelogCache_MissWhenNotInStorageEither(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-cache-total-miss")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	fsStorage, err := filesystem.NewFilesystemStorage(ctx, filesystem.Config{
 		BaseDir: tempDir,
@@ -187,7 +187,7 @@ func TestChangelogCache_MissWhenNotInStorageEither(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer fsStorage.Close()
+	defer func() { _ = fsStorage.Close() }()
 
 	cache := NewChangelogCache(fsStorage)
 
@@ -210,20 +210,20 @@ func TestChangelogCache_MultipleBackends(t *testing.T) {
 
 	tempDir1 := filepath.Join(os.TempDir(), "test-cache-multi-1")
 	tempDir2 := filepath.Join(os.TempDir(), "test-cache-multi-2")
-	defer os.RemoveAll(tempDir1)
-	defer os.RemoveAll(tempDir2)
+	defer func() { _ = os.RemoveAll(tempDir1) }()
+	defer func() { _ = os.RemoveAll(tempDir2) }()
 
 	fs1, err := filesystem.NewFilesystemStorage(ctx, filesystem.Config{BaseDir: tempDir1})
 	if err != nil {
 		t.Fatalf("Failed to create storage 1: %v", err)
 	}
-	defer fs1.Close()
+	defer func() { _ = fs1.Close() }()
 
 	fs2, err := filesystem.NewFilesystemStorage(ctx, filesystem.Config{BaseDir: tempDir2})
 	if err != nil {
 		t.Fatalf("Failed to create storage 2: %v", err)
 	}
-	defer fs2.Close()
+	defer func() { _ = fs2.Close() }()
 
 	cache := NewChangelogCache(fs1, fs2)
 

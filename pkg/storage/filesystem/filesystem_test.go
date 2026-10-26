@@ -42,7 +42,7 @@ func TestNewFilesystemStorage(t *testing.T) {
 				_ = storage.Close()
 				// Clean up
 				if tt.cfg.BaseDir != "" {
-					os.RemoveAll(tt.cfg.BaseDir)
+					_ = os.RemoveAll(tt.cfg.BaseDir)
 				}
 			}
 		})
@@ -52,7 +52,7 @@ func TestNewFilesystemStorage(t *testing.T) {
 func TestFilesystemStorage_GetSet(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-changelog-storage")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	storage, err := NewFilesystemStorage(ctx, Config{
 		BaseDir: tempDir,
@@ -60,7 +60,7 @@ func TestFilesystemStorage_GetSet(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	// Test Get on non-existent changelog
 	changelog, found, err := storage.Get(ctx, "1.0.0", "2.0.0")
@@ -145,7 +145,7 @@ func TestFilesystemStorage_GetSet(t *testing.T) {
 func TestFilesystemStorage_List(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-changelog-list")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	storage, err := NewFilesystemStorage(ctx, Config{
 		BaseDir: tempDir,
@@ -153,7 +153,7 @@ func TestFilesystemStorage_List(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	// Add some changelogs
 	changelogs := map[string]string{
@@ -211,7 +211,7 @@ func TestFilesystemStorage_List(t *testing.T) {
 func TestFilesystemStorage_Close(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-changelog-close")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	storage, err := NewFilesystemStorage(ctx, Config{
 		BaseDir: tempDir,
@@ -235,7 +235,7 @@ func TestFilesystemStorage_Close(t *testing.T) {
 func TestFilesystemStorage_FilePaths(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-changelog-paths")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	storage, err := NewFilesystemStorage(ctx, Config{
 		BaseDir: tempDir,
@@ -243,7 +243,7 @@ func TestFilesystemStorage_FilePaths(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	// Test that different version pairs produce different file paths
 	path1 := storage.getFilePath("1.0.0", "2.0.0")
@@ -276,13 +276,13 @@ func TestFilesystemStorage_FilePaths(t *testing.T) {
 func TestFilesystemStorage_Count(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-changelog-count")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	storage, err := NewFilesystemStorage(ctx, Config{BaseDir: tempDir})
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	if err := storage.Set(ctx, "1.0.0", "2.0.0", "first"); err != nil {
 		t.Fatalf("Set() error = %v", err)

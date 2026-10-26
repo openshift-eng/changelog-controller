@@ -66,7 +66,7 @@ func TestBigQueryStorage_GetSet(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	// Test Set
 	testChangelog := "Test changelog content"

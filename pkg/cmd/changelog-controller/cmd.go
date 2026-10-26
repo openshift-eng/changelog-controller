@@ -633,7 +633,9 @@ func (o *Options) handleChangelog(w http.ResponseWriter, r *http.Request) {
 		}
 		enc := json.NewEncoder(w)
 		enc.SetEscapeHTML(false)
-		enc.Encode(accepted)
+		if err := enc.Encode(accepted); err != nil {
+			klog.Errorf("Failed to write changelog request response: %v", err)
+		}
 	} else {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintf(w, `{"error": "controller not initialized"}`+"\n")
@@ -897,7 +899,9 @@ func (o *Options) handleKernel(w http.ResponseWriter, r *http.Request) {
 		}
 		enc := json.NewEncoder(w)
 		enc.SetEscapeHTML(false)
-		enc.Encode(accepted)
+		if err := enc.Encode(accepted); err != nil {
+			klog.Errorf("Failed to write RPM extraction response: %v", err)
+		}
 		return
 	}
 

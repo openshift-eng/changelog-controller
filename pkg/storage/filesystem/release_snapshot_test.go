@@ -14,13 +14,13 @@ import (
 func TestSnapshotStorage_GetSet(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-snapshots")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	ss, err := NewSnapshotStorage(ctx, tempDir)
 	if err != nil {
 		t.Fatalf("NewSnapshotStorage() error = %v", err)
 	}
-	defer ss.Close()
+	defer func() { _ = ss.Close() }()
 
 	pullSpec := "registry.ci.openshift.org/ocp/release@sha256:abc123"
 
@@ -83,13 +83,13 @@ func TestSnapshotStorage_GetSet(t *testing.T) {
 func TestSnapshotStorage_List(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-snapshots-list")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	ss, err := NewSnapshotStorage(ctx, tempDir)
 	if err != nil {
 		t.Fatalf("NewSnapshotStorage() error = %v", err)
 	}
-	defer ss.Close()
+	defer func() { _ = ss.Close() }()
 
 	specs := []string{
 		"registry.ci.openshift.org/ocp/release@sha256:aaa",

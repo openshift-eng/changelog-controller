@@ -25,7 +25,7 @@ func (r *gcsClientReader) ReadObject(ctx context.Context, path string) ([]byte, 
 	if err != nil {
 		return nil, fmt.Errorf("%s: %w", path, err)
 	}
-	defer reader.Close()
+	defer func() { _ = reader.Close() }()
 
 	data, err := io.ReadAll(reader)
 	if err != nil {

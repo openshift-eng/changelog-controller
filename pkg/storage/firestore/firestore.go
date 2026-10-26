@@ -77,7 +77,7 @@ func NewFirestoreStorage(ctx context.Context, cfg Config) (*FirestoreStorage, er
 
 	gcsClient, err := gcs.NewClient(ctx)
 	if err != nil {
-		fsClient.Close()
+		_ = fsClient.Close()
 		return nil, fmt.Errorf("failed to create GCS client: %w", err)
 	}
 

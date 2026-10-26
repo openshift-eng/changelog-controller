@@ -27,11 +27,11 @@ func TestHandleChangelog_Validation(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"4-stable": ["2.0.0", "1.0.0"]
 			}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{
@@ -65,7 +65,7 @@ func TestHandleChangelog_Validation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create release-controller client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	originServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -73,11 +73,11 @@ func TestHandleChangelog_Validation(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"4-stable": ["2.0.0", "1.0.0"]
 			}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{
@@ -110,7 +110,7 @@ func TestHandleChangelog_Validation(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create origin client: %v", err)
 	}
-	defer originClient.Close()
+	defer func() { _ = originClient.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -243,7 +243,7 @@ func TestHandleChangelog_Validation(t *testing.T) {
 			opts.handleChangelog(w, req)
 
 			resp := w.Result()
-			defer resp.Body.Close()
+			defer func() { _ = resp.Body.Close() }()
 
 			if resp.StatusCode != tt.expectedStatus {
 				t.Errorf("Expected status %d, got %d", tt.expectedStatus, resp.StatusCode)
@@ -270,11 +270,11 @@ func TestHandleChangelog_JSONEscaping(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"4-stable": ["2.0.0", "1.0.0"]
 			}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{
@@ -308,7 +308,7 @@ func TestHandleChangelog_JSONEscaping(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create release-controller client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	// Create a MultiClient for testing with just this one client
 	multiClient := &rc.MultiClient{}
@@ -418,7 +418,7 @@ func TestWriteChangelogResponse(t *testing.T) {
 			opts.writeChangelogResponse(w, tt.from, tt.to, tt.changelog, tt.format, "amd64", tt.fromPullSpec, tt.toPullSpec, nil, "")
 
 			resp := w.Result()
-			defer resp.Body.Close()
+			defer func() { _ = resp.Body.Close() }()
 
 			if resp.StatusCode != http.StatusOK {
 				t.Errorf("Expected status 200, got %d", resp.StatusCode)
@@ -446,7 +446,7 @@ func TestWriteChangelogResponse_StructuredJSON(t *testing.T) {
 	opts.writeChangelogResponse(w, "4.18.2", "4.18.3", changelogJSON, "json", "amd64", "registry/from", "registry/to", nil, "")
 
 	resp := w.Result()
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	var result map[string]any
 	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {
@@ -507,7 +507,7 @@ func TestWriteChangelogResponse_StructuredHTML(t *testing.T) {
 	opts.writeChangelogResponse(w, "4.18.2", "4.18.3", changelogJSON, "html", "amd64", "", "", rpmDiff, "")
 
 	resp := w.Result()
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
 		t.Errorf("Expected status 200, got %d", resp.StatusCode)
@@ -573,9 +573,9 @@ func TestHandleKernel(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [{
 					"name": "4.22.6",
@@ -600,7 +600,7 @@ func TestHandleKernel(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create release-controller client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	originServer := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -608,9 +608,9 @@ func TestHandleKernel(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"5-scos-next": ["5.0.0"]}`))
+			_, _ = w.Write([]byte(`{"5-scos-next": ["5.0.0"]}`))
 		case "/api/v1/releasestream/5-scos-next/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "5-scos-next",
 				"tags": [{
 					"name": "5.0.0",
@@ -635,7 +635,7 @@ func TestHandleKernel(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create origin client: %v", err)
 	}
-	defer originClient.Close()
+	defer func() { _ = originClient.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -771,9 +771,9 @@ func TestHandleKernel_KernelRTInExtensions(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [{
 					"name": "4.22.6",
@@ -798,7 +798,7 @@ func TestHandleKernel_KernelRTInExtensions(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create release-controller client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -843,9 +843,9 @@ func TestHandleKernel_NoKernelPackage(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [{
 					"name": "4.22.6",
@@ -870,7 +870,7 @@ func TestHandleKernel_NoKernelPackage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create release-controller client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -908,9 +908,9 @@ func TestHandleKernel_202AcceptedWhenRPMNotCached(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [{
 					"name": "4.22.6",
@@ -934,7 +934,7 @@ func TestHandleKernel_202AcceptedWhenRPMNotCached(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -975,9 +975,9 @@ func TestHandleKernel_202WhenSnapshotHasNilRPMList(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["4.22.6"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [{
 					"name": "4.22.6",
@@ -1001,7 +1001,7 @@ func TestHandleKernel_202WhenSnapshotHasNilRPMList(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -1056,9 +1056,9 @@ func TestHandleChangelog_CacheMiss202(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{"name": "1.0.0", "phase": "Accepted", "pullSpec": "quay.io/test/release:1.0.0-x86_64"},
@@ -1080,7 +1080,7 @@ func TestHandleChangelog_CacheMiss202(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -1133,9 +1133,9 @@ func TestHandleChangelog_WithRpmDiff(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{"name": "1.0.0", "phase": "Accepted", "pullSpec": "quay.io/test/release:1.0.0-x86_64"},
@@ -1157,7 +1157,7 @@ func TestHandleChangelog_WithRpmDiff(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -1233,9 +1233,9 @@ func TestHandleChangelog_RpmDiffStatusWhenMissing(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{"name": "1.0.0", "phase": "Accepted", "pullSpec": "quay.io/test/release:1.0.0-x86_64"},
@@ -1257,7 +1257,7 @@ func TestHandleChangelog_RpmDiffStatusWhenMissing(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)
@@ -1311,9 +1311,9 @@ func TestHandleChangelog_NoControllerReturns500(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
+			_, _ = w.Write([]byte(`{"4-stable": ["2.0.0", "1.0.0"]}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{"name": "1.0.0", "phase": "Accepted", "pullSpec": "quay.io/test/release:1.0.0-x86_64"},
@@ -1335,7 +1335,7 @@ func TestHandleChangelog_NoControllerReturns500(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	multiClient := &rc.MultiClient{}
 	multiClient.AddClientForTesting(rc.ProductOCP, rc.ArchitectureAMD64, client)

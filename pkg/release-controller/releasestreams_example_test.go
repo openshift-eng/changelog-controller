@@ -20,7 +20,7 @@ func Example_getAllReleaseStreams() {
 		log.Printf("Failed to create client: %v", err)
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	// Show what the API returns
 	fmt.Println("Endpoint: /api/v1/releasestreams/all")
@@ -64,7 +64,7 @@ func Example_getReleaseStreamNames() {
 		log.Printf("Failed to create client: %v", err)
 		return
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	fmt.Println("GetReleaseStreamNames() returns sorted []string")
 	fmt.Println("Examples:")

@@ -19,7 +19,7 @@ func Example_basicUsage() {
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	// Get the endpoint information
 	endpoint := client.GetEndpoint()
@@ -40,7 +40,7 @@ func Example_multiClient() {
 	if err != nil {
 		log.Fatalf("Failed to create multi-client: %v", err)
 	}
-	defer mc.Close()
+	defer func() { _ = mc.Close() }()
 
 	// Access specific endpoints
 	products := []rc.Product{rc.ProductOCP, rc.ProductOrigin}
@@ -122,7 +122,7 @@ func Example_contextUsage() {
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	// Create a context with cancellation
 	ctx, cancel := context.WithCancel(context.Background())
@@ -147,7 +147,7 @@ func Example_iterateAllClients() {
 	if err != nil {
 		log.Fatalf("Failed to create multi-client: %v", err)
 	}
-	defer mc.Close()
+	defer func() { _ = mc.Close() }()
 
 	allClients := mc.GetAllClients()
 	fmt.Printf("Total clients: %d\n", len(allClients))

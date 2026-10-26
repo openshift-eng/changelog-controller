@@ -49,13 +49,13 @@ func TestReleaseExtractor_GetSetCache(t *testing.T) {
 func TestReleaseExtractor_GetFromStorage(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-extractor-storage")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	ss, err := filesystem.NewSnapshotStorage(ctx, tempDir)
 	if err != nil {
 		t.Fatalf("NewSnapshotStorage() error = %v", err)
 	}
-	defer ss.Close()
+	defer func() { _ = ss.Close() }()
 
 	pullSpec := "registry.ci.openshift.org/ocp/release@sha256:stored"
 
@@ -96,13 +96,13 @@ func TestReleaseExtractor_GetFromStorage(t *testing.T) {
 func TestReleaseExtractor_WarmCache(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-extractor-warm")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	ss, err := filesystem.NewSnapshotStorage(ctx, tempDir)
 	if err != nil {
 		t.Fatalf("NewSnapshotStorage() error = %v", err)
 	}
-	defer ss.Close()
+	defer func() { _ = ss.Close() }()
 
 	specs := []string{
 		"registry.ci.openshift.org/ocp/release@sha256:warm1",
@@ -204,13 +204,13 @@ func TestReleaseExtractor_ExtractDoesNotSkipWhenRPMListNil(t *testing.T) {
 func TestReleaseExtractor_StoragePersistence(t *testing.T) {
 	ctx := context.Background()
 	tempDir := filepath.Join(os.TempDir(), "test-extractor-persist")
-	defer os.RemoveAll(tempDir)
+	defer func() { _ = os.RemoveAll(tempDir) }()
 
 	ss, err := filesystem.NewSnapshotStorage(ctx, tempDir)
 	if err != nil {
 		t.Fatalf("NewSnapshotStorage() error = %v", err)
 	}
-	defer ss.Close()
+	defer func() { _ = ss.Close() }()
 
 	pullSpec := "registry.ci.openshift.org/ocp/release@sha256:persist-test"
 

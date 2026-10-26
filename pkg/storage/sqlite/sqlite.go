@@ -40,7 +40,7 @@ func NewSQLiteStorage(ctx context.Context, cfg Config) (*SQLiteStorage, error) {
 
 	// Test connection
 	if err := db.PingContext(ctx); err != nil {
-		db.Close()
+		_ = db.Close()
 		return nil, fmt.Errorf("failed to ping SQLite database: %w", err)
 	}
 
@@ -48,7 +48,7 @@ func NewSQLiteStorage(ctx context.Context, cfg Config) (*SQLiteStorage, error) {
 
 	// Initialize schema
 	if err := s.initSchema(ctx); err != nil {
-		db.Close()
+		_ = db.Close()
 		return nil, fmt.Errorf("failed to initialize schema: %w", err)
 	}
 
@@ -127,7 +127,7 @@ func (s *SQLiteStorage) List(ctx context.Context) ([]storage.ChangelogEntry, err
 	if err != nil {
 		return nil, fmt.Errorf("failed to query changelogs: %w", err)
 	}
-	defer rows.Close()
+	defer func() { _ = rows.Close() }()
 
 	var entries []storage.ChangelogEntry
 	for rows.Next() {

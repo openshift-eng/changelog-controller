@@ -24,11 +24,15 @@ sonar-reports:
 lint:
 	@echo "Running linter..."
 	@if command -v $(GOLINT) >/dev/null 2>&1; then \
-		$(GOLINT) run ./$(BINARY_PATH)/...; \
+		$(GOLINT) run ./...; \
 	else \
 		echo "golangci-lint not installed. Install with: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; \
+		exit 1; \
 	fi
 .PHONY: lint
+
+verify: lint
+.PHONY: verify
 
 vendor:
 	go mod tidy

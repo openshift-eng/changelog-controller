@@ -120,7 +120,7 @@ func TestFirestoreStorage_GetSet(t *testing.T) {
 	cleanup()
 	t.Cleanup(func() {
 		cleanup()
-		storage.Close()
+		_ = storage.Close()
 	})
 
 	// Test Get on non-existent changelog

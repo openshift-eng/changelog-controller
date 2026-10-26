@@ -38,7 +38,7 @@ func TestReleaseWatcher_DetectsNewReleases(t *testing.T) {
 				}
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 
 		case "/api/v1/releasestream/4-stable/latest":
 			// Latest Accepted release is the predecessor of the new Ready release
@@ -48,14 +48,14 @@ func TestReleaseWatcher_DetectsNewReleases(t *testing.T) {
 				PullSpec: "registry.ci.openshift.org/ocp/release:4.18.2",
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 
 		case "/api/v1/releasestreams/all":
 			resp := map[string][]string{
 				"4-stable": {"4.18.3", "4.18.2", "4.18.1", "4.18.0"},
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 
 		case "/api/v1/releasestream/4-stable/tags":
 			resp := rc.TagsResponse{
@@ -68,7 +68,7 @@ func TestReleaseWatcher_DetectsNewReleases(t *testing.T) {
 				},
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 
 		default:
 			w.WriteHeader(http.StatusNotFound)
@@ -139,13 +139,13 @@ func TestReleaseWatcher_NoDuplicateEnqueue(t *testing.T) {
 				"4-stable": {"4.18.2", "4.18.1", "4.18.0"},
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 		case "/api/v1/releasestreams/all":
 			resp := map[string][]string{
 				"4-stable": {"4.18.2", "4.18.1", "4.18.0"},
 			}
 			w.Header().Set("Content-Type", "application/json")
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -190,21 +190,21 @@ func TestReleaseWatcher_SeedTriggersExtraction(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/ready":
-			json.NewEncoder(w).Encode(map[string][]string{
+			_ = json.NewEncoder(w).Encode(map[string][]string{
 				"4-stable": {"4.18.2", "4.18.1"},
 			})
 		case "/api/v1/releasestream/4-stable/latest":
-			json.NewEncoder(w).Encode(rc.Tag{
+			_ = json.NewEncoder(w).Encode(rc.Tag{
 				Name:     "4.18.2",
 				Phase:    "Accepted",
 				PullSpec: "quay.io/test/release:4.18.2-x86_64",
 			})
 		case "/api/v1/releasestreams/all":
-			json.NewEncoder(w).Encode(map[string][]string{
+			_ = json.NewEncoder(w).Encode(map[string][]string{
 				"4-stable": {"4.18.2", "4.18.1"},
 			})
 		case "/api/v1/releasestream/4-stable/tags":
-			json.NewEncoder(w).Encode(rc.TagsResponse{
+			_ = json.NewEncoder(w).Encode(rc.TagsResponse{
 				Name: "4-stable",
 				Tags: []rc.Tag{
 					{Name: "4.18.2", PullSpec: "quay.io/test/release:4.18.2-x86_64"},
@@ -281,20 +281,20 @@ func TestReleaseWatcher_SeedExtractionConcurrency(t *testing.T) {
 			for _, s := range streamNames {
 				resp[s] = []string{s + ".1"}
 			}
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 
 		case "/api/v1/releasestreams/all":
 			resp := make(map[string][]string)
 			for _, s := range streamNames {
 				resp[s] = []string{s + ".1"}
 			}
-			json.NewEncoder(w).Encode(resp)
+			_ = json.NewEncoder(w).Encode(resp)
 
 		default:
 			// Handle /api/v1/releasestream/{stream}/latest and /tags
 			for _, s := range streamNames {
 				if r.URL.Path == "/api/v1/releasestream/"+s+"/latest" {
-					json.NewEncoder(w).Encode(rc.Tag{
+					_ = json.NewEncoder(w).Encode(rc.Tag{
 						Name:     s + ".1",
 						Phase:    "Accepted",
 						PullSpec: "quay.io/test/" + s + ".1",
@@ -302,7 +302,7 @@ func TestReleaseWatcher_SeedExtractionConcurrency(t *testing.T) {
 					return
 				}
 				if r.URL.Path == "/api/v1/releasestream/"+s+"/tags" {
-					json.NewEncoder(w).Encode(rc.TagsResponse{
+					_ = json.NewEncoder(w).Encode(rc.TagsResponse{
 						Name: s,
 						Tags: []rc.Tag{
 							{Name: s + ".1", PullSpec: "quay.io/test/" + s + ".1"},
@@ -388,26 +388,26 @@ func TestReleaseWatcher_PollTriggersExtraction(t *testing.T) {
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/ready":
 			if p == 0 {
-				json.NewEncoder(w).Encode(map[string][]string{
+				_ = json.NewEncoder(w).Encode(map[string][]string{
 					"4-stable": {"4.18.1"},
 				})
 			} else {
-				json.NewEncoder(w).Encode(map[string][]string{
+				_ = json.NewEncoder(w).Encode(map[string][]string{
 					"4-stable": {"4.18.2", "4.18.1"},
 				})
 			}
 		case "/api/v1/releasestream/4-stable/latest":
-			json.NewEncoder(w).Encode(rc.Tag{
+			_ = json.NewEncoder(w).Encode(rc.Tag{
 				Name:     "4.18.1",
 				Phase:    "Accepted",
 				PullSpec: "quay.io/test/release:4.18.1-x86_64",
 			})
 		case "/api/v1/releasestreams/all":
-			json.NewEncoder(w).Encode(map[string][]string{
+			_ = json.NewEncoder(w).Encode(map[string][]string{
 				"4-stable": {"4.18.2", "4.18.1"},
 			})
 		case "/api/v1/releasestream/4-stable/tags":
-			json.NewEncoder(w).Encode(rc.TagsResponse{
+			_ = json.NewEncoder(w).Encode(rc.TagsResponse{
 				Name: "4-stable",
 				Tags: []rc.Tag{
 					{Name: "4.18.2", PullSpec: "quay.io/test/release:4.18.2-x86_64"},

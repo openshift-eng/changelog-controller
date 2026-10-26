@@ -18,7 +18,7 @@ func TestGetTagsForStream(t *testing.T) {
 
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{
+		_, _ = w.Write([]byte(`{
 			"name": "4-stable",
 			"tags": [
 				{
@@ -48,7 +48,7 @@ func TestGetTagsForStream(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ctx := context.Background()
 
@@ -89,11 +89,11 @@ func TestGetPullSpec(t *testing.T) {
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
 			// Return a simple release stream with our test release
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"4-stable": ["4.21.10", "4.21.9"]
 			}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{
@@ -126,7 +126,7 @@ func TestGetPullSpec(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ctx := context.Background()
 
@@ -148,11 +148,11 @@ func TestGetTagForRelease(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"4-stable": ["4.21.10", "4.21.9"]
 			}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{
@@ -179,7 +179,7 @@ func TestGetTagForRelease(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ctx := context.Background()
 
@@ -209,7 +209,7 @@ func TestGetPullSpecNotFound(t *testing.T) {
 
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
-			w.Write([]byte(`{}`))
+			_, _ = w.Write([]byte(`{}`))
 		default:
 			w.WriteHeader(http.StatusNotFound)
 		}
@@ -226,7 +226,7 @@ func TestGetPullSpecNotFound(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ctx := context.Background()
 

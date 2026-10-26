@@ -90,7 +90,7 @@ func TestClientGet(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/test" {
 			w.WriteHeader(http.StatusOK)
-			w.Write([]byte("test response"))
+			_, _ = w.Write([]byte("test response"))
 			return
 		}
 		w.WriteHeader(http.StatusNotFound)
@@ -113,7 +113,7 @@ func TestClientGet(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ctx := context.Background()
 
@@ -123,7 +123,7 @@ func TestClientGet(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
-		defer body.Close()
+		defer func() { _ = body.Close() }()
 
 		data, err := io.ReadAll(body)
 		if err != nil {
@@ -152,7 +152,7 @@ func TestClientGet(t *testing.T) {
 		if err != nil {
 			t.Fatalf("unexpected error: %v", err)
 		}
-		defer body.Close()
+		defer func() { _ = body.Close() }()
 
 		data, err := io.ReadAll(body)
 		if err != nil {
@@ -170,7 +170,7 @@ func TestClientGetJSON(t *testing.T) {
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte(`{"version": "4.14.0", "phase": "Accepted"}`))
+		_, _ = w.Write([]byte(`{"version": "4.14.0", "phase": "Accepted"}`))
 	}))
 	defer server.Close()
 
@@ -184,7 +184,7 @@ func TestClientGetJSON(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	ctx := context.Background()
 
@@ -214,7 +214,7 @@ func TestNewClientForEndpoint(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create client: %v", err)
 	}
-	defer client.Close()
+	defer func() { _ = client.Close() }()
 
 	endpoint := client.GetEndpoint()
 	if endpoint.Architecture != ArchitectureAMD64 {
@@ -240,7 +240,7 @@ func TestMultiClient(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create multi-client: %v", err)
 	}
-	defer mc.Close()
+	defer func() { _ = mc.Close() }()
 
 	// Test getting a valid client
 	t.Run("get ocp amd64 client", func(t *testing.T) {

@@ -56,7 +56,7 @@ func TestSQLiteStorage_GetSet(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	// Test Get on non-existent changelog
 	changelog, found, err := storage.Get(ctx, "1.0.0", "2.0.0")
@@ -165,7 +165,7 @@ func TestSQLiteStorage_Count(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create storage: %v", err)
 	}
-	defer storage.Close()
+	defer func() { _ = storage.Close() }()
 
 	if err := storage.Set(ctx, "1.0.0", "2.0.0", "first"); err != nil {
 		t.Fatalf("Set() error = %v", err)

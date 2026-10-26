@@ -118,7 +118,7 @@ func TestSnapshotStorage_GetSet(t *testing.T) {
 	cleanup()
 	t.Cleanup(func() {
 		cleanup()
-		ss.Close()
+		_ = ss.Close()
 	})
 
 	// Get on non-existent snapshot
@@ -220,7 +220,7 @@ func TestSnapshotStorage_SetOverwrite(t *testing.T) {
 	cleanup()
 	t.Cleanup(func() {
 		cleanup()
-		ss.Close()
+		_ = ss.Close()
 	})
 
 	// First Set: manifest only, no RPM data

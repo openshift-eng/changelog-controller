@@ -21,11 +21,11 @@ func TestPullSpecIntegration(t *testing.T) {
 		switch r.URL.Path {
 		case "/api/v1/releasestreams/all":
 			// Return a simple release stream with our test releases
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"4-stable": ["4.21.10", "4.21.9", "4.21.8"]
 			}`))
 		case "/api/v1/releasestream/4-stable/tags":
-			w.Write([]byte(`{
+			_, _ = w.Write([]byte(`{
 				"name": "4-stable",
 				"tags": [
 					{
@@ -59,7 +59,7 @@ func TestPullSpecIntegration(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create release-controller client: %v", err)
 	}
-	defer rcClient.Close()
+	defer func() { _ = rcClient.Close() }()
 
 	// Create cache with sample changelog
 	ctx := context.Background()
@@ -104,7 +104,7 @@ func TestPullSpecIntegration(t *testing.T) {
 		opts.writeChangelogResponse(w, "4.21.9", "4.21.10", changelog, "json", "amd64", fromPS, toPS, nil, "")
 
 		resp := w.Result()
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		if resp.StatusCode != http.StatusOK {
 			t.Errorf("expected status 200, got %d", resp.StatusCode)
@@ -140,7 +140,7 @@ func TestPullSpecIntegration(t *testing.T) {
 		opts.writeChangelogResponse(w, "4.21.9", "4.21.10", changelog, "json", "amd64", "", "", nil, "")
 
 		resp := w.Result()
-		defer resp.Body.Close()
+		defer func() { _ = resp.Body.Close() }()
 
 		var result map[string]any
 		if err := json.NewDecoder(resp.Body).Decode(&result); err != nil {

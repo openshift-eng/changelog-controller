@@ -104,7 +104,7 @@ func (c *client) Get(ctx context.Context, path string) (io.ReadCloser, error) {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		resp.Body.Close()
+		_ = resp.Body.Close()
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
@@ -117,7 +117,7 @@ func (c *client) GetJSON(ctx context.Context, path string, v any) error {
 	if err != nil {
 		return err
 	}
-	defer body.Close()
+	defer func() { _ = body.Close() }()
 
 	if err := json.NewDecoder(body).Decode(v); err != nil {
 		return fmt.Errorf("failed to decode JSON response: %w", err)
